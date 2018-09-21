@@ -23,16 +23,19 @@ var mempool =  {
   insert: async function(item) {
     await db.collection("unconfirmed").insertMany(item).catch(function(err) {
       console.log("## ERR ", err, item)
+      process.exit()
     })
   },
   reset: async function() {
     await db.collection("unconfirmed").deleteMany({}).catch(function(err) {
       console.log("## ERR ", err)
+      process.exit()
     })
   },
   sync: async function(items) {
     await db.collection("unconfirmed").deleteMany({}).catch(function(err) {
       console.log("## ERR ", err)
+      process.exit()
     })
     let index = 0;
     while (true) {
@@ -40,6 +43,7 @@ var mempool =  {
       if (chunk.length > 0) {
         await db.collection("unconfirmed").insertMany(chunk, { ordered: false }).catch(function(err) {
           console.log("## ERR ", err, items)
+          process.exit()
         })
         console.log("..chunk " + index + " processed ...", new Date().toString())
         index++;
@@ -54,6 +58,7 @@ var block = {
   reset: async function() {
     await db.collection("confirmed").deleteMany({}).catch(function(err) {
       console.log("## ERR ", err)
+      process.exit()
     })
   },
   replace: async function(items, block_index) {
@@ -64,6 +69,7 @@ var block = {
       }
     }).catch(function(err) {
       console.log("## ERR ", err)
+      process.exit()
     })
     console.log("Updating block", block_index, "with", items.length, "items")
     let index = 0;
@@ -72,6 +78,7 @@ var block = {
       if (chunk.length > 0) {
         await db.collection("confirmed").insertMany(chunk, { ordered: false }).catch(function(err) {
           console.log("## ERR ", err, items)
+          process.exit()
         })
         console.log("\tchunk " + index + " processed ...")
         index++;
@@ -95,7 +102,7 @@ var block = {
       }
     } catch (e) {
       console.log("## ERR ", e, items, block_index)
-      throw e;
+      process.exit()
     }
     console.log("Block " + block_index + " inserted ")
   },
