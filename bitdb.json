@@ -1,0 +1,12 @@
+{
+  "version": "0.2.0",
+  "db": "mongodb",
+  "from": 525470,
+  "filter": {
+    "find": {
+      "b0": {
+        "opcodenum": 106
+      }
+    }
+  }
+}
